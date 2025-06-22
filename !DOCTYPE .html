@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardway Grinders - Elite Discord Guild</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
+        
+        /* Fallback fonts in case Google Fonts don't load */
+        .orbitron-fallback { font-family: 'Orbitron', 'Courier New', monospace; }
+        .rajdhani-fallback { font-family: 'Rajdhani', 'Arial', sans-serif; }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            font-family: 'Rajdhani', 'Arial', sans-serif;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .discord-container {
+            position: relative;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .discord-embed {
+            background: linear-gradient(145deg, #2c2f33 0%, #23272a 100%);
+            border-radius: 16px;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 100px rgba(114, 137, 218, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(114, 137, 218, 0.3);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(0.5deg); }
+        }
+        
+        .header-section {
+            background: linear-gradient(135deg, #7289da 0%, #5865f2 100%);
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .guild-title {
+            font-family: 'Orbitron', 'Courier New', monospace;
+            font-size: 28px;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 8px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(45deg, #fff, #ffd700, #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(67, 181, 129, 0.2);
+            border: 1px solid #43b581;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #43b581;
+            position: relative;
+            z-index: 2;
+            margin: 0 auto;
+            width: fit-content;
+            display: block;
+        }
+        
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: #43b581;
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: pulse-online 2s infinite;
+        }
+        
+        @keyframes pulse-online {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .content-body {
+            padding: 24px;
+        }
+        
+        .guild-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(145deg, #36393f 0%, #2f3136 100%);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid rgba(114, 137, 218, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #7289da, transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+        
+        .stat-card:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 32px rgba(114, 137, 218, 0.3);
+            border-color: #7289da;
+        }
+        
+        .stat-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 4px;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            color: #b9bbbe;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .requirements-section {
+            background: linear-gradient(145deg, #2f3136 0%, #36393f 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffd700;
+            position: relative;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .section-icon {
+            font-size: 20px;
+            margin-right: 10px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .requirements-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        .req-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            background: rgba(114, 137, 218, 0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .req-item:hover {
+            background: rgba(114, 137, 218, 0.2);
+            transform: translateX(4px);
+        }
+        
+        .req-check {
+            color: #43b581;
+            margin-right: 8px;
+            font-size: 14px;
+        }
+        
+        .req-text {
+            font-size: 14px;
+            color: #dcddde;
+            font-weight: 600;
+        }
+        
+        .highlight {
+            color: #ffd700;
+            font-weight: 700;
+        }
+        
+        .benefits-section {
+            background: linear-gradient(145deg, #36393f 0%, #2f3136 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #43b581;
+        }
+        
+        .benefits-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: rgba(67, 181, 129, 0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .benefit-item:hover {
+            background: rgba(67, 181, 129, 0.2);
+            transform: scale(1.02);
+        }
+        
+        .benefit-icon {
+            color: #43b581;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        
+        .quote-section {
+            text-align: center;
+            margin: 24px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(114, 137, 218, 0.1), rgba(67, 181, 129, 0.1));
+            border-radius: 12px;
+            border: 1px solid rgba(114, 137, 218, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quote-section::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-size: 60px;
+            color: rgba(255, 215, 0, 0.3);
+            font-family: serif;
+        }
+        
+        .quote-text {
+            font-size: 16px;
+            font-style: italic;
+            color: #ffd700;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .contact-section {
+            background: linear-gradient(135deg, #7289da, #5865f2);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .contact-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: rotate 4s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .contact-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .contact-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .contact-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .contact-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .contact-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 4px;
+        }
+        
+        .contact-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffd700;
+        }
+        
+        .join-button {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #000000;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 24px rgba(255, 215, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .join-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .join-button:hover::before {
+            left: 100%;
+        }
+        
+        .join-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 32px rgba(255, 215, 0, 0.6);
+        }
+        
+        .join-button:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+        
+        .floating-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background: #7289da;
+            border-radius: 50%;
+            animation: float-particle 8s infinite ease-in-out;
+        }
+        
+        @keyframes float-particle {
+            0%, 100% {
+                transform: translateY(100vh) translateX(0px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .guild-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .requirements-grid,
+            .benefits-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .guild-title {
+                font-size: 24px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .discord-embed {
+                margin: 10px;
+            }
+            
+            .header-section,
+            .content-body {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles"></div>
+    
+    <div class="discord-container">
+        <div class="discord-embed">
+            <div class="header-section">
+                <div class="header-bg"></div>
+                <div class="guild-title">⚡ HARDWAY GRINDERS ⚡</div>
+                <div class="status-badge">
+                    <div class="online-dot"></div>
+                    Active • 350M+ GP • Elite Guild
+                </div>
+            </div>
+            
+            <div class="content-body">
+                <div class="guild-stats">
+                    <div class="stat-card">
+                        <div class="stat-number">350M+</div>
+                        <div class="stat-label">Guild GP</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">50</div>
+                        <div class="stat-label">Members</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Active</div>
+                    </div>
+                </div>
+                
+                <div class="requirements-section">
+                    <div class="section-header">
+                        <div class="section-icon">⚡</div>
+                        <div class="section-title">Requirements</div>
+                    </div>
+                    <div class="requirements-grid">
+                        <div class="req-item">
+                            <div class="req-check">✓</div>
+                            <div class="req-text"><span class="highlight">3+ GLs</span> minimum</div>
+                        </div>
+                        <div class="req-item">
+                            <div class="req-check">✓</div>
+                            <div class="req-text"><span class="highlight">Naboo ready</span></div>
+                        </div>
+                        <div class="req-item">
+                            <div class="req-check">✓</div>
+                            <div class="req-text">600 tickets daily</div>
+                        </div>
+                        <div class="req-item">
+                            <div class="req-check">✓</div>
+                            <div class="req-text">Discord active</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="benefits-section">
+                    <div class="section-header">
+                        <div class="section-icon">🎯</div>
+                        <div class="section-title">What You Get</div>
+                    </div>
+                    <div class="benefits-list">
+                        <div class="benefit-item">
+                            <div class="benefit-icon">🏆</div>
+                            <div class="req-text"><span class="highlight">Naboo raids</span></div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">⚔️</div>
+                            <div class="req-text">TW/TB focused</div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">😎</div>
+                            <div class="req-text">No-pressure fun</div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">🧠</div>
+                            <div class="req-text">Expert advice</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quote-section">
+                    <div class="quote-text">We grind hard, but keep it chill ✨</div>
+                </div>
+                
+                <div class="contact-section">
+                    <div class="contact-content">
+                        <div class="contact-title">🚀 Ready to Join the Elite?</div>
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <div class="contact-label">Discord</div>
+                                <div class="contact-value">dman112</div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-label">Ally Code</div>
+                                <div class="contact-value">989-817-653</div>
+                            </div>
+                        </div>
+                        <button class="join-button" onclick="joinGuild()">Join Now!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const container = document.querySelector('.floating-particles');
+            const particleCount = 15;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = Math.random() * 6 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                container.appendChild(particle);
+            }
+        }
+        
+        // Button interaction
+        function joinGuild() {
+            const button = document.querySelector('.join-button');
+            button.style.transform = 'scale(0.95)';
+            button.textContent = 'Message Sent! 🚀';
+            
+            setTimeout(() => {
+                button.style.transform = '';
+                button.textContent = 'Join Now!';
+            }, 2000);
+        }
+        
+        // Add hover effects and animations
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            
+            // Animate elements on scroll/load
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+            
+            // Add stagger animation to cards
+            const cards = document.querySelectorAll('.stat-card, .req-item, .benefit-item');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.6s ease';
+                card.style.transitionDelay = (index * 0.1) + 's';
+            });
+            
+            // Trigger animations
+            setTimeout(() => {
+                cards.forEach(card => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                });
+            }, 500);
+            
+            // Add click effects
+            document.querySelectorAll('.stat-card, .req-item, .benefit-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+        });
+        
+        // Add some interactivity to the guild title
+        document.querySelector('.guild-title').addEventListener('mouseenter', function() {
+            this.style.textShadow = '0 0 30px rgba(255, 215, 0, 1)';
+        });
+        
+        document.querySelector('.guild-title').addEventListener('mouseleave', function() {
+            this.style.textShadow = '0 0 20px rgba(255, 255, 255, 0.8)';
+        });
+    </script>
+</body>
+</html>
